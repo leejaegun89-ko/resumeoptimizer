@@ -4,7 +4,6 @@ import { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { DocumentArrowUpIcon, ArrowDownTrayIcon } from '@heroicons/react/24/outline';
 import mammoth from 'mammoth';
-import { Document, Packer, Paragraph, TextRun } from 'docx';
 import htmlDocx from 'html-docx-js/dist/html-docx';
 
 interface OptimizedContent {
@@ -18,7 +17,6 @@ export default function ResumeOptimizer() {
   const [resumeContent, setResumeContent] = useState<string>('');
   const [resumeHtml, setResumeHtml] = useState<string>('');
   const [optimizedHtml, setOptimizedHtml] = useState<string>('');
-  const [optimizedContent, setOptimizedContent] = useState<OptimizedContent[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [optimizedBullets, setOptimizedBullets] = useState<string[]>([]);
@@ -153,7 +151,7 @@ export default function ResumeOptimizer() {
           {isLoading ? 'Optimizing...' : 'Optimize Resume'}
         </button>
 
-        {optimizedContent.length > 0 && (
+        {optimizedHtml && (
           <button
             onClick={handleDownload}
             className="px-4 py-2 rounded-md bg-green-600 text-white font-medium hover:bg-green-700 flex items-center space-x-2"
