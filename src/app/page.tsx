@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import ResumeOptimizer from '@/components/ResumeOptimizer';
 
 export default function Home() {
