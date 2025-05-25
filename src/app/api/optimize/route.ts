@@ -28,7 +28,11 @@ export async function POST(req: Request) {
 
   // 1. docx 파일 파싱
   const zip = new PizZip(buffer);
-  const docXml = zip.file('word/document.xml').asText();
+  const docFile = zip.file('word/document.xml');
+  if (!docFile) {
+    return NextResponse.json({ error: 'Invalid docx file: document.xml not found' }, { status: 400 });
+  }
+  const docXml = docFile.asText();
 
   // 2. bullet point(리스트) 단락 찾기 (ListParagraph 스타일)
   const bulletRegex = /<w:p[^>]*>(?:(?!<w:p>).)*?<w:pStyle[^>]*w:val=\"ListParagraph\"[^>]*>.*?<\/w:p>/gs;
