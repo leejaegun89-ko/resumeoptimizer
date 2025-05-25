@@ -35,7 +35,7 @@ export async function POST(req: Request) {
   const docXml = docFile.asText();
 
   // 2. bullet point(리스트) 단락 찾기 (ListParagraph 스타일)
-  const bulletRegex = /<w:p[^>]*>(?:(?!<w:p>).)*?<w:pStyle[^>]*w:val=\"ListParagraph\"[^>]*>.*?<\/w:p>/gs;
+  const bulletRegex = /<w:p[^>]*>(?:(?!<w:p>).)*?<w:pStyle[^>]*w:val=\"ListParagraph\"[^>]*>[\s\S]*?<\/w:p>/g;
   const bulletParagraphs = docXml.match(bulletRegex) || [];
 
   // 3. 각 bullet point의 텍스트 추출
