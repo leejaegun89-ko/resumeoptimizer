@@ -6,11 +6,6 @@ import { DocumentArrowUpIcon, ArrowDownTrayIcon } from '@heroicons/react/24/outl
 import mammoth from 'mammoth';
 import htmlDocx from 'html-docx-js/dist/html-docx';
 
-interface OptimizedContent {
-  original: string;
-  optimized: string;
-}
-
 export default function ResumeOptimizer() {
   const [jobDescription, setJobDescription] = useState('');
   const [companyWebsite, setCompanyWebsite] = useState('');
