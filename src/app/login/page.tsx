@@ -16,7 +16,7 @@ export default function LoginPage() {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       router.push('/'); // On success, go to home
-    } catch (err: any) {
+    } catch (err) {
       setError('Invalid email or password');
     }
   };
@@ -51,7 +51,7 @@ export default function LoginPage() {
           </button>
         </form>
         <div className="mt-4 text-center">
-          <span className="text-zinc-300">Don't have an account? </span>
+          <span className="text-zinc-300">Don&apos;t have an account? </span>
           <button
             className="text-yellow-400 hover:underline"
             onClick={() => router.push('/signup')}

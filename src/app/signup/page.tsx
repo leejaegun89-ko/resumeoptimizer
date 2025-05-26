@@ -16,7 +16,7 @@ export default function SignupPage() {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
       router.push('/'); // On success, go to home
-    } catch (err: any) {
+    } catch (err) {
       setError('Failed to sign up. Try a different email or stronger password.');
     }
   };

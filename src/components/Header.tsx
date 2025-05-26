@@ -1,12 +1,12 @@
 'use client';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState, useRef } from 'react';
-import { onAuthStateChanged, signOut, updateEmail, updatePassword } from 'firebase/auth';
+import { onAuthStateChanged, signOut, updateEmail, updatePassword, User } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 
 export default function Header() {
   const router = useRouter();
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [showProfile, setShowProfile] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [email, setEmail] = useState('');
@@ -46,15 +46,15 @@ export default function Header() {
     e.preventDefault();
     setError('');
     try {
-      if (user && email !== user.email) {
+      if (user && email !== (user.email || '')) {
         await updateEmail(user, email);
       }
-      if (password) {
+      if (user && password) {
         await updatePassword(user, password);
       }
       setEditMode(false);
       setPassword('');
-    } catch (err: any) {
+    } catch (err) {
       setError('Failed to update. Try a different email or stronger password.');
     }
   };
@@ -124,7 +124,7 @@ export default function Header() {
                     <button
                       type="button"
                       className="flex-1 py-2 rounded-lg bg-zinc-800 text-zinc-200 font-semibold border border-zinc-700 hover:bg-zinc-700 transition"
-                      onClick={() => { setEditMode(false); setError(''); setPassword(''); setEmail(user.email); }}
+                      onClick={() => { setEditMode(false); setError(''); setPassword(''); setEmail(user?.email || ''); }}
                     >
                       Cancel
                     </button>
