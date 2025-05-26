@@ -3,7 +3,7 @@ import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, deleteDoc, doc } from 'firebase/firestore';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -65,4 +65,8 @@ export async function saveResumeOptimization({
     fileName,
     createdAt: new Date(),
   });
+}
+
+export async function deleteResumeOptimization(docId: string) {
+  await deleteDoc(doc(db, 'resumeOptimizations', docId));
 } 
