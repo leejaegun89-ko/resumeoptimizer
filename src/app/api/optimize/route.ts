@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import OpenAI from 'openai';
 import PizZip from 'pizzip';
+import { auth, db, storage } from '@/lib/firebase';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 
 export const config = {
   api: {
@@ -67,4 +69,13 @@ export async function POST(req: Request) {
 
   // AI가 수정한 bullet point 리스트만 반환
   return NextResponse.json({ optimizedBullets });
-} 
+}
+
+const signIn = async (email: string, password: string) => {
+  try {
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    // Handle successful sign in
+  } catch (error) {
+    // Handle error
+  }
+}; 

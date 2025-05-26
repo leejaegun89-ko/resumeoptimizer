@@ -5,10 +5,13 @@ import { useDropzone } from 'react-dropzone';
 import { DocumentArrowUpIcon, ArrowDownTrayIcon } from '@heroicons/react/24/outline';
 import mammoth from 'mammoth';
 import htmlDocx from 'html-docx-js/dist/html-docx';
+import { saveResumeOptimization } from '@/lib/firebase';
+import { getAuth } from 'firebase/auth';
 
 export default function ResumeOptimizer() {
   const [jobDescription, setJobDescription] = useState('');
   const [companyWebsite, setCompanyWebsite] = useState('');
+  const [companyName, setCompanyName] = useState('');
   const [resumeContent, setResumeContent] = useState<string>('');
   const [resumeHtml, setResumeHtml] = useState<string>('');
   const [optimizedHtml, setOptimizedHtml] = useState<string>('');
@@ -37,7 +40,7 @@ export default function ResumeOptimizer() {
   });
 
   const handleOptimize = async () => {
-    if (!jobDescription || !resumeContent || !resumeHtml || !uploadedFile) return;
+    if (!jobDescription || !resumeContent || !resumeHtml || !uploadedFile || !companyName) return;
     setIsLoading(true);
     try {
       const formData = new FormData();
@@ -53,10 +56,29 @@ export default function ResumeOptimizer() {
       const data = await response.json();
       setOptimizedBullets(data.optimizedBullets);
 
-      // 원본 HTML에서 bullet point만 하이라이트해서 교체
+      // 원본 bullet 추출 (ul, ol의 li 텍스트)
       const parser = new DOMParser();
       const doc = parser.parseFromString(resumeHtml, 'text/html');
       const bulletLis = Array.from(doc.querySelectorAll('ul li, ol li'));
+      const originalBullets = bulletLis.map(li => li.textContent || '');
+
+      // Firestore 저장 (로그인된 유저만)
+      const auth = getAuth();
+      const user = auth.currentUser;
+      if (user) {
+        await saveResumeOptimization({
+          userId: user.uid,
+          userEmail: user.email || '',
+          jobDescription,
+          companyWebsite,
+          companyName,
+          originalBullets,
+          optimizedBullets: data.optimizedBullets,
+          fileName: uploadedFile.name,
+        });
+      }
+
+      // 원본 HTML에서 bullet point만 하이라이트해서 교체
       data.optimizedBullets.forEach((bullet: string, idx: number) => {
         if (bulletLis[idx]) {
           bulletLis[idx].innerHTML = `<mark style='background: #fff9c0'>${bullet}</mark>`;
@@ -94,6 +116,17 @@ export default function ResumeOptimizer() {
   return (
     <div className="space-y-8">
       <div className="space-y-4">
+        <label className="block">
+          <span className="block text-xl font-bold text-[#ffe066] mb-2 drop-shadow">Company Name</span>
+          <input
+            type="text"
+            className="mt-1 block w-full rounded-lg border border-zinc-700 bg-zinc-900 text-white shadow-lg focus:border-yellow-400 focus:ring-yellow-400 placeholder:text-zinc-400 transition"
+            placeholder="Enter the company name"
+            value={companyName}
+            onChange={e => setCompanyName(e.target.value)}
+            required
+          />
+        </label>
         <label className="block">
           <span className="block text-xl font-bold text-[#ffe066] mb-2 drop-shadow">Job Description</span>
           <textarea

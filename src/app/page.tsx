@@ -1,10 +1,13 @@
 'use client';
 
 import ResumeOptimizer from '@/components/ResumeOptimizer';
+import Header from '@/components/Header';
+import Sidebar from '@/components/Sidebar';
 
 export default function Home() {
   return (
     <main className="min-h-screen w-full bg-black bg-gradient-to-b from-black via-[#0a0a23] to-black relative overflow-x-hidden">
+      <Sidebar />
       {/* 우주 별빛 효과 */}
       <div className="pointer-events-none absolute inset-0 z-0">
         {/* 랜덤 별빛 (간단한 예시) */}
@@ -15,7 +18,8 @@ export default function Home() {
         <div className="absolute top-3/4 left-1/5 w-1 h-1 bg-white/60 rounded-full blur-[1.5px] animate-pulse" />
         {/* ...더 추가 가능 */}
       </div>
-      <div className="relative z-10 max-w-4xl mx-auto px-4 py-12">
+      <div className="relative z-10 max-w-4xl mx-auto px-4 py-12" style={{ paddingLeft: '17rem' }}>
+        <Header />
         <div className="rounded-3xl bg-zinc-900/80 shadow-2xl border border-zinc-800 p-8 backdrop-blur-md">
           <h1 className="text-4xl font-extrabold text-white mb-2 tracking-tight drop-shadow-lg">
             AI Resume Optimizer
